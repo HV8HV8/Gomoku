@@ -4,7 +4,7 @@
 
 「本作业中所有界面元素均为原创手绘或通过设计工具绘制，未经授权，不得用于任何商业及非商业的二次用途，包括但不限于复制、传播、改编、转载等。」
 ### 飞天皮肤界面
-<img width="800" height="800" alt="image" src="https://github.com/user-attachments/assets/36b386b9-189e-49c1-911b-5a77cb6edffd" />  
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/36b386b9-189e-49c1-911b-5a77cb6edffd" />  
 移动鼠标，左右两侧飞天会运动  
 
 #### 鼠标悬浮在按钮上会变色  

@@ -14,10 +14,10 @@
 #pragma comment(lib,"winmm.lib")
 #pragma comment(lib,"MSIMG32.LIB")
 
-#define BOARD_SIZE 15//ÆåÅÌ³ß´ç
-const int R = 19;//Æå×Ó°ë¾¶
+#define BOARD_SIZE 15//æ£‹ç›˜å°ºå¯¸
+const int R = 19;//æ£‹å­åŠå¾„
 
-//ÓÃÀ´¸ü»»Ò³Ãæ
+//ç”¨æ¥æ›´æ¢é¡µé¢
 enum page {
 	ftStart,
 	jxStart,
@@ -41,17 +41,17 @@ enum state {
 	empty,//0
 	blackc,//1
 	whitec,//2
-}BOARD[226][BOARD_SIZE][BOARD_SIZE];//Æå¾Ö
+}BOARD[226][BOARD_SIZE][BOARD_SIZE];//æ£‹å±€
 
-//¼ÇÂ¼Âä×Ó
+//è®°å½•è½å­
 int placex[226] = { 0 };
 int placey[226] = { 0 };
 
-//¼ÇÂ¼Ó®Æå
+//è®°å½•èµ¢æ£‹
 int winx[5] = { 0 };
 int winy[5] = { 0 };
 
-//³õÊ¼»¯ÆåÅÌ
+//åˆå§‹åŒ–æ£‹ç›˜
 void initialize() {
 	for (int i = 0; i < BOARD_SIZE; ++i) {
 		for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -68,16 +68,16 @@ void initialize_k (int k) {
 	}
 }
 
-int step = 0;//ÆåµÄ²½Êı
-bool end = false;//ÊÇ·ñ½áÊø
+int step = 0;//æ£‹çš„æ­¥æ•°
+bool end = false;//æ˜¯å¦ç»“æŸ
 
-//ÅĞ¶ÏÊ¤Àû
+//åˆ¤æ–­èƒœåˆ©
 bool Win(bool turn) {
 	//0 blackc,1 whitec
 	state color;
 	if (turn) color = whitec;
 	else color = blackc;
-	//ºáÏò
+	//æ¨ªå‘
 	for (int i = 0; i < BOARD_SIZE; ++i) {
 		int count = 0;
 		for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -97,7 +97,7 @@ bool Win(bool turn) {
 			}
 		}
 	}
-	//×İÏò
+	//çºµå‘
 	for (int j = 0; j < BOARD_SIZE; ++j) {
 		int count = 0;
 		for (int i = 0; i < BOARD_SIZE; ++i) {
@@ -117,7 +117,7 @@ bool Win(bool turn) {
 			}
 		}
 	}
-	//×óÏÂÓÒÉÏ
+	//å·¦ä¸‹å³ä¸Š
 	for (int k = 4; k < 25; ++k) {
 		int count = 0;
 		for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -138,7 +138,7 @@ bool Win(bool turn) {
 			}
 		}
 	}
-	//×óÉÏÓÒÏÂ
+	//å·¦ä¸Šå³ä¸‹
 	for (int k = -10; k < 11; ++k) {
 		int count = 0;
 		for (int i = 0; i < BOARD_SIZE; ++i) {
@@ -170,95 +170,95 @@ enum condition {
 	doubleFour,
 	longConnection
 };
-//ºÚÆå½ûÊÖ
+//é»‘æ£‹ç¦æ‰‹
 
 //condition KeyPointForbiddenCheck(int x, int y, int adjsame, int direction);
 
 condition ForbiddenCheck(int x,int y) {
-	if (step % 2 == 1) return notBlack;//°×Æå²»½ûÊÖ
+	if (step % 2 == 1) return notBlack;//ç™½æ£‹ä¸ç¦æ‰‹
 
-	//Êı×éÏÂ±ê±íÊ¾·½Ïò
+	//æ•°ç»„ä¸‹æ ‡è¡¨ç¤ºæ–¹å‘
 	/*
-	×óÉÏ7 ÏòÉÏ0 ÓÒÉÏ1
-	Ïò×ó6       ÏòÓÒ2
-	×óÏÂ5 ÏòÏÂ4 ÓÒÏÂ3
+	å·¦ä¸Š7 å‘ä¸Š0 å³ä¸Š1
+	å‘å·¦6       å‘å³2
+	å·¦ä¸‹5 å‘ä¸‹4 å³ä¸‹3
 	*/
-	int adjsame[8] = { 0 };//Óë(x,y)ÏàÁÚÁ¬ĞøºÚÆåÊı adjacent
-	int adjempty[8] = { 0 };//adjsameºóÏàÁÚÁ¬Ğø¿ÕÎ»Êı
-	int jumpsame[8] = { 0 };//adjemptyºóÁ¬ĞøºÚÆåÊı
-	int jumpempty[8] = { 0 };//jumpsameºóÁ¬Ğø¿ÕÎ»Êı
-	int jumpjumpsame[8] = { 0 };//jumpemptyºóÁ¬ĞøºÚÆåÊı
+	int adjsame[8] = { 0 };//ä¸(x,y)ç›¸é‚»è¿ç»­é»‘æ£‹æ•° adjacent
+	int adjempty[8] = { 0 };//adjsameåç›¸é‚»è¿ç»­ç©ºä½æ•°
+	int jumpsame[8] = { 0 };//adjemptyåè¿ç»­é»‘æ£‹æ•°
+	int jumpempty[8] = { 0 };//jumpsameåè¿ç»­ç©ºä½æ•°
+	int jumpjumpsame[8] = { 0 };//jumpemptyåè¿ç»­é»‘æ£‹æ•°
 	
 	int _x = x, _y = y;
 
-	//ÏòÉÏ
+	//å‘ä¸Š
 	for (_y = y - 1; (_y >= 0) && (BOARD[step][x][_y] == blackc); _y--, adjsame[0]++);
 	for (; (_y >= 0) && BOARD[step][x][_y] == empty; _y--, adjempty[0]++);
 	for (; (_y >= 0) && BOARD[step][x][_y] == blackc; _y--, jumpsame[0]++);
 	for (; (_y >= 0) && BOARD[step][x][_y] == empty; _y--, jumpempty[0]++);
 	for (; (_y >= 0) && BOARD[step][x][_y] == blackc; _y--, jumpjumpsame[0]++);
 
-	//ÓÒÉÏ
+	//å³ä¸Š
 	for (_x = x + 1,_y = y - 1; (_x < 15)&&(_y >= 0) && (BOARD[step][_x][_y] == blackc);_x++, _y--, adjsame[1]++);
 	for (; (_x < 15) && (_y >= 0) && BOARD[step][_x][_y] == empty; _x++, _y--, adjempty[1]++);
 	for (; (_x < 15) && (_y >= 0) && BOARD[step][_x][_y] == blackc; _x++, _y--, jumpsame[1]++);
 	for (; (_x < 15) && (_y >= 0) && BOARD[step][_x][_y] == empty; _x++, _y--, jumpempty[1]++);
 	for (; (_x < 15) && (_y >= 0) && BOARD[step][_x][_y] == blackc; _x++, _y--, jumpjumpsame[1]++);
 
-	//ÏòÓÒ
+	//å‘å³
 	for (_x = x + 1; (_x < 15) && (BOARD[step][_x][y] == blackc); _x++, adjsame[2]++);
 	for (; (_x < 15) && BOARD[step][_x][y] == empty; _x++, adjempty[2]++);
 	for (; (_x < 15) && BOARD[step][_x][y] == blackc; _x++, jumpsame[2]++);
 	for (; (_x < 15) && BOARD[step][_x][y] == empty; _x++, jumpempty[2]++);
 	for (; (_x < 15) && BOARD[step][_x][y] == blackc; _x++, jumpjumpsame[2]++);
 
-	//ÓÒÏÂ
+	//å³ä¸‹
 	for (_x = x + 1, _y = y + 1; (_x < 15) && (_y < 15) && (BOARD[step][_x][_y] == blackc); _x++, _y++, adjsame[3]++);
 	for (; (_x < 15) && (_y < 15) && BOARD[step][_x][_y] == empty; _x++, _y++, adjempty[3]++);
 	for (; (_x < 15) && (_y < 15) && BOARD[step][_x][_y] == blackc; _x++, _y++, jumpsame[3]++);
 	for (; (_x < 15) && (_y < 15) && BOARD[step][_x][_y] == empty; _x++, _y++, jumpempty[3]++);
 	for (; (_x < 15) && (_y < 15) && BOARD[step][_x][_y] == blackc; _x++, _y++, jumpjumpsame[3]++);
 
-	//ÏòÏÂ
+	//å‘ä¸‹
 	for (_y = y + 1; (_y < 15) && (BOARD[step][x][_y] == blackc); _y++, adjsame[4]++);
 	for (; (_y < 15) && BOARD[step][x][_y] == empty; _y++, adjempty[4]++);
 	for (; (_y < 15) && BOARD[step][x][_y] == blackc; _y++, jumpsame[4]++);
 	for (; (_y < 15) && BOARD[step][x][_y] == empty; _y++, jumpempty[4]++);
 	for (; (_y < 15) && BOARD[step][x][_y] == blackc; _y++, jumpjumpsame[4]++);
 
-	//×óÏÂ
+	//å·¦ä¸‹
 	for (_x = x - 1, _y = y + 1; (_x >= 0) && (_y < 15) && (BOARD[step][_x][_y] == blackc); _x--, _y++, adjsame[5]++);
 	for (; (_x >= 0) && (_y < 15) && BOARD[step][_x][_y] == empty; _x--, _y++, adjempty[5]++);
 	for (; (_x >= 0) && (_y < 15) && BOARD[step][_x][_y] == blackc; _x--, _y++, jumpsame[5]++);
 	for (; (_x >= 0) && (_y < 15) && BOARD[step][_x][_y] == empty; _x--, _y++, jumpempty[5]++);
 	for (; (_x >= 0) && (_y < 15) && BOARD[step][_x][_y] == blackc; _x--, _y++, jumpjumpsame[5]++);
 
-	//Ïò×ó
+	//å‘å·¦
 	for (_x = x - 1; (_x >= 0) && (BOARD[step][_x][y] == blackc); _x--, adjsame[6]++);
 	for (; (_x >= 0) && BOARD[step][_x][y] == empty; _x--, adjempty[6]++);
 	for (; (_x >= 0) && BOARD[step][_x][y] == blackc; _x--, jumpsame[6]++);
 	for (; (_x >= 0) && BOARD[step][_x][y] == empty; _x--, jumpempty[6]++);
 	for (; (_x >= 0) && BOARD[step][_x][y] == blackc; _x--, jumpjumpsame[6]++);
 
-	//×óÉÏ
+	//å·¦ä¸Š
 	for (_x = x - 1, _y = y - 1; (_x >= 0) && (_y >= 0) && (BOARD[step][_x][_y] == blackc); _x--, _y--, adjsame[7]++);
 	for (; (_x >= 0) && (_y >= 0) && BOARD[step][_x][_y] == empty; _x--, _y--, adjempty[7]++);
 	for (; (_x >= 0) && (_y >= 0) && BOARD[step][_x][_y] == blackc; _x--, _y--, jumpsame[7]++);
 	for (; (_x >= 0) && (_y >= 0) && BOARD[step][_x][_y] == empty; _x--, _y--, jumpempty[7]++);
 	for (; (_x >= 0) && (_y >= 0) && BOARD[step][_x][_y] == blackc; _x--, _y--, jumpjumpsame[7]++);
 
-	//ÏÈ¼ì²éÊÇ·ñ³ÉÁ¬Îå£¬Èô³ÉÁ¬Îå£¬ÓÅÏÈÓÚ½ûÊÖ£¬ºÚÆå»ñÊ¤
+	//å…ˆæ£€æŸ¥æ˜¯å¦æˆè¿äº”ï¼Œè‹¥æˆè¿äº”ï¼Œä¼˜å…ˆäºç¦æ‰‹ï¼Œé»‘æ£‹è·èƒœ
 	/*
-	°Ë¸ö·½Ïò
-	×óÉÏ7 ÏòÉÏ0 ÓÒÉÏ1
-	Ïò×ó6       ÏòÓÒ2
-	×óÏÂ5 ÏòÏÂ4 ÓÒÏÂ3
+	å…«ä¸ªæ–¹å‘
+	å·¦ä¸Š7 å‘ä¸Š0 å³ä¸Š1
+	å‘å·¦6       å‘å³2
+	å·¦ä¸‹5 å‘ä¸‹4 å³ä¸‹3
 
-	ËÄÌõÏß
-	0   ÊúÖ±   ¡ü¡ı
-	1 ×óÏÂÓÒÉÏ ¨L¨J
-	2   Ë®Æ½   ¡û¡ú
-	3 ×óÉÏÓÒÏÂ ¨I¨K
+	å››æ¡çº¿
+	0   ç«–ç›´   â†‘â†“
+	1 å·¦ä¸‹å³ä¸Š â†™â†—
+	2   æ°´å¹³   â†â†’
+	3 å·¦ä¸Šå³ä¸‹ â†–â†˜
 	*/
 	for (int i = 0; i < 4; ++i) {
 		if (adjsame[i] + adjsame[i + 4] == 4) {
@@ -322,29 +322,29 @@ condition ForbiddenCheck(int x,int y) {
 		}
 	}
 
-	//¡ª¡ª¡ª¡ª½ûÊÖÅĞ¶Ï¡ª¡ª¡ª¡ª
-	int three = 0, four = 0;//»îÈıÊı¡¢»îËÄ+³åËÄÊı
+	//â€”â€”â€”â€”ç¦æ‰‹åˆ¤æ–­â€”â€”â€”â€”
+	int three = 0, four = 0;//æ´»ä¸‰æ•°ã€æ´»å››+å†²å››æ•°
 
 
 	for (int i = 0; i < 4; ++i) {
-		//³¤Á¬½ûÊÖ
-		if (adjsame[i] + adjsame[i + 4] >= 5) return longConnection;//Îå×ÓÒÔÉÏÏàÁ¬
+		//é•¿è¿ç¦æ‰‹
+		if (adjsame[i] + adjsame[i + 4] >= 5) return longConnection;//äº”å­ä»¥ä¸Šç›¸è¿
 
-		//ËÄ×ÓÏàÁ¬£º?¡ñ¡ñ¡ñ¡ñ?
-		// ?Ö¸³ıºÚÆåÍâµÄËùÓĞ
+		//å››å­ç›¸è¿ï¼š?â—â—â—â—?
+		// ?æŒ‡é™¤é»‘æ£‹å¤–çš„æ‰€æœ‰
 		else if (adjsame[i] + adjsame[i + 4] == 3) {
 
-			//»îËÄ¡¢³åËÄÅĞ¶Ï
+			//æ´»å››ã€å†²å››åˆ¤æ–­
 			bool isFour = false;
 
-			//?¿Õ¡ñ¡ñ¡ñ¡ñ?
+			//?ç©ºâ—â—â—â—?
 			if (adjempty[i] > 0) { 
-				//Í¨¹ıµİ¹éÅĞ¶Ï¹Ø¼üµãÊÇ·ñ¿ÉÏÂ
+				//é€šè¿‡é€’å½’åˆ¤æ–­å…³é”®ç‚¹æ˜¯å¦å¯ä¸‹
 				//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 				isFour = true;
 			}
 
-			//?¡ñ¡ñ¡ñ¡ñ¿Õ?
+			//?â—â—â—â—ç©º?
 			if (adjempty[i + 4] > 0) {
 				//if (KeyPointForbiddenCheck(x, y, adjsame[i+4], i+4) == notForbidden) 
 				isFour = true;
@@ -352,32 +352,32 @@ condition ForbiddenCheck(int x,int y) {
 			if (isFour) four++;
 		}
 
-		//Èı×ÓÏàÁ¬£º?¡ñ¡ñ¡ñ?
+		//ä¸‰å­ç›¸è¿ï¼š?â—â—â—?
 		else if (adjsame[i] + adjsame[i + 4] == 2) {
 
-			//»îËÄ¡¢³åËÄÅĞ¶Ï
+			//æ´»å››ã€å†²å››åˆ¤æ–­
 			
-			//?¡ñ¿Õ¡ñ¡ñ¡ñ?
+			//?â—ç©ºâ—â—â—?
 			if (adjempty[i] == 1 && jumpsame[i] == 1) {
 				//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 				four++;
 			}
-			//?¡ñ¡ñ¡ñ¿Õ¡ñ?
+			//?â—â—â—ç©ºâ—?
 			if (adjempty[i+4] == 1 && jumpsame[i+4] == 1) {
 				//if (KeyPointForbiddenCheck(x, y, adjsame[i+4], i+4) == notForbidden) 
 				four++;
 			}
 
-			//»îÈıÅĞ¶Ï
+			//æ´»ä¸‰åˆ¤æ–­
 			bool isThree = false;
 
-			//?¿Õ¿Õ¡ñ¡ñ¡ñ¿Õ£¿
+			//?ç©ºç©ºâ—â—â—ç©ºï¼Ÿ
 			if (((adjempty[i] > 2) || ((adjempty[i] == 2) && (jumpsame[i] == 0))) && ((adjempty[i + 4] > 1) || ((adjempty[i + 4] == 1) && (jumpsame[i + 4] == 0)))) {
 				//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 				isThree = true;
 			}
 
-			//?¿Õ¡ñ¡ñ¡ñ¿Õ¿Õ£¿
+			//?ç©ºâ—â—â—ç©ºç©ºï¼Ÿ
 			if (((adjempty[i + 4] > 2) || ((adjempty[i + 4] == 2) && (jumpsame[i] == 0))) && ((adjempty[i] > 1) || ((adjempty[i] == 1) && (jumpsame[i] == 0)))) {
 				//if (KeyPointForbiddenCheck(x, y, adjsame[i+4], i+4) == notForbidden) 
 				isThree = true;
@@ -386,12 +386,12 @@ condition ForbiddenCheck(int x,int y) {
 			if(isThree) three++;
 		}
 
-		//¶ş×ÓÏàÁ¬ ?¡ñ¡ñ?
+		//äºŒå­ç›¸è¿ ?â—â—?
 		else if (adjsame[i] + adjsame[i + 4] == 1) {
 
-			//»îËÄ¡¢³åËÄÅĞ¶Ï
+			//æ´»å››ã€å†²å››åˆ¤æ–­
 
-			//?¡ñ¡ñ¿Õ¡ñ¡ñ?
+			//?â—â—ç©ºâ—â—?
 			if (adjempty[i] == 1 && jumpsame[i] == 2) {
 				//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 				four++;
@@ -401,9 +401,9 @@ condition ForbiddenCheck(int x,int y) {
 				four++;
 			}
 
-			//»îÈıÅĞ¶Ï
+			//æ´»ä¸‰åˆ¤æ–­
 
-			//?¿Õ¡ñ¿Õ¡ñ¡ñ¿Õ?
+			//?ç©ºâ—ç©ºâ—â—ç©º?
 			if ((adjempty[i] == 1) && (adjsame[i+4] == 1) && ((jumpempty[i+4] > 1) || ((jumpempty[i+4] == 1) && (jumpjumpsame[i+4] == 0))) && ((adjempty[i] > 1) || ((adjempty[i] == 1) && (jumpsame[i] == 0)))) {
 				//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 				three++;
@@ -414,39 +414,39 @@ condition ForbiddenCheck(int x,int y) {
 			}
 		}
 
-		//Ò»×Ó ?¡ñ?
+		//ä¸€å­ ?â—?
 		else if (adjsame[i] + adjsame[i + 4] == 0) {
 
-			//»îËÄ¡¢³åËÄÅĞ¶Ï
+			//æ´»å››ã€å†²å››åˆ¤æ–­
 
-			//?¡ñ¡ñ¡ñ¿Õ¡ñ£¿
+			//?â—â—â—ç©ºâ—ï¼Ÿ
 			if (adjempty[i] == 1 && jumpsame[i] == 3) {
 				//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 				four++;
 			}
 
-			//?¡ñ¿Õ¡ñ¡ñ¡ñ?
+			//?â—ç©ºâ—â—â—?
 			if (adjempty[i + 4] == 1 && jumpsame[i + 4] == 3) {
 				//if (KeyPointForbiddenCheck(x, y, adjsame[i+4], i+4) == notForbidden) 
 				four++;
 			}
 
-			//»îÈıÅĞ¶Ï
+			//æ´»ä¸‰åˆ¤æ–­
 
-			//?¿Õ¡ñ¡ñ¿Õ¡ñ¿Õ£¿
+			//?ç©ºâ—â—ç©ºâ—ç©ºï¼Ÿ
 			if ((adjempty[i] == 1) && (jumpsame[i] == 2) && ((jumpempty[i] > 1) || ((jumpempty[i] == 1) && (jumpjumpsame[i] == 0))) && ((adjempty[i + 4] > 1) || ((adjempty[i + 4] == 1) && (jumpsame[i + 4] == 0)))) {
 				//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 				three++;
 			}
 
-			//?¿Õ¡ñ¿Õ¡ñ¡ñ¿Õ?
+			//?ç©ºâ—ç©ºâ—â—ç©º?
 			if ((adjempty[i + 4] == 1) && (jumpsame[i + 4] == 2) && ((jumpempty[i + 4] > 1) || ((jumpempty[i + 4] == 1) && (jumpjumpsame[i + 4] == 0))) && ((adjempty[i] > 1) || ((adjempty[i] == 1) && (jumpsame[i + 4] == 0)))) {
 				//if (KeyPointForbiddenCheck(x, y, adjsame[i + 4], i + 4) == notForbidden) 
 				three++;
 			}
 		}
 	}
-	//¡ª¡ª¡ª¡ª½ûÊÖÅĞ¶Ï½áÊø¡ª¡ª¡ª¡ª
+	//â€”â€”â€”â€”ç¦æ‰‹åˆ¤æ–­ç»“æŸâ€”â€”â€”â€”
 
 	if (four > 1) return doubleFour;
 	if (three > 1)return doubleThree;
@@ -458,7 +458,7 @@ condition ForbiddenCheck(int x,int y) {
 	adjsame++;
 	if (direction >= 4)adjsame = -adjsame;
 
-	//¼ÆËã¹Ø¼üµã×ø±ê
+	//è®¡ç®—å…³é”®ç‚¹åæ ‡
 	switch (direction % 4) {
 	case 0:
 		i = x;
@@ -478,22 +478,22 @@ condition ForbiddenCheck(int x,int y) {
 	default:break;
 	}
 
-	//ÏòÆåÅÌÖĞ·ÅÈëÆå×Ó
+	//å‘æ£‹ç›˜ä¸­æ”¾å…¥æ£‹å­
 	BOARD[step][x][y] = blackc;
 	BOARD[step][x][y] = blackc;
 
-	//¼ì²é¹Ø¼üµã
+	//æ£€æŸ¥å…³é”®ç‚¹
 	condition result = ForbiddenCheck(i, j);
 
-	//»¹Ô­
+	//è¿˜åŸ
 	BOARD[step][x][y] = empty;
 	BOARD[step][x][y] = empty;
 
 	return result;
 }*/
 
-bool computer = false;//ÊÇ·ñÈË»ú¶ÔÕ½
-bool XianShou = true;//ÊÇ·ñÏÈÊÖ
+bool computer = false;//æ˜¯å¦äººæœºå¯¹æˆ˜
+bool XianShou = true;//æ˜¯å¦å…ˆæ‰‹
 
 class Board {
 private:
@@ -509,92 +509,92 @@ public:
 		}
 		return;
 	}
-	//¿ÉÖ±½Ó¸´ÖÆÖ®Ç°µÄ
+	//å¯ç›´æ¥å¤åˆ¶ä¹‹å‰çš„
 	condition ForbiddenCheck(int x, int y) {
-		if (step % 2 == 1) return notBlack;//°×Æå²»½ûÊÖ
+		if (step % 2 == 1) return notBlack;//ç™½æ£‹ä¸ç¦æ‰‹
 
-		//Êı×éÏÂ±ê±íÊ¾·½Ïò
+		//æ•°ç»„ä¸‹æ ‡è¡¨ç¤ºæ–¹å‘
 		/*
-		×óÉÏ7 ÏòÉÏ0 ÓÒÉÏ1
-		Ïò×ó6       ÏòÓÒ2
-		×óÏÂ5 ÏòÏÂ4 ÓÒÏÂ3
+		å·¦ä¸Š7 å‘ä¸Š0 å³ä¸Š1
+		å‘å·¦6       å‘å³2
+		å·¦ä¸‹5 å‘ä¸‹4 å³ä¸‹3
 		*/
-		int adjsame[8] = { 0 };//Óë(x,y)ÏàÁÚÁ¬ĞøºÚÆåÊı adjacent
-		int adjempty[8] = { 0 };//adjsameºóÏàÁÚÁ¬Ğø¿ÕÎ»Êı
-		int jumpsame[8] = { 0 };//adjemptyºóÁ¬ĞøºÚÆåÊı
-		int jumpempty[8] = { 0 };//jumpsameºóÁ¬Ğø¿ÕÎ»Êı
-		int jumpjumpsame[8] = { 0 };//jumpemptyºóÁ¬ĞøºÚÆåÊı
+		int adjsame[8] = { 0 };//ä¸(x,y)ç›¸é‚»è¿ç»­é»‘æ£‹æ•° adjacent
+		int adjempty[8] = { 0 };//adjsameåç›¸é‚»è¿ç»­ç©ºä½æ•°
+		int jumpsame[8] = { 0 };//adjemptyåè¿ç»­é»‘æ£‹æ•°
+		int jumpempty[8] = { 0 };//jumpsameåè¿ç»­ç©ºä½æ•°
+		int jumpjumpsame[8] = { 0 };//jumpemptyåè¿ç»­é»‘æ£‹æ•°
 
 		int _x = x, _y = y;
 
-		//ÏòÉÏ
+		//å‘ä¸Š
 		for (_y = y - 1; (_y >= 0) && (board[x][_y] == blackc); _y--, adjsame[0]++);
 		for (; (_y >= 0) && board[x][_y] == empty; _y--, adjempty[0]++);
 		for (; (_y >= 0) && board[x][_y] == blackc; _y--, jumpsame[0]++);
 		for (; (_y >= 0) && board[x][_y] == empty; _y--, jumpempty[0]++);
 		for (; (_y >= 0) && board[x][_y] == blackc; _y--, jumpjumpsame[0]++);
 
-		//ÓÒÉÏ
+		//å³ä¸Š
 		for (_x = x + 1, _y = y - 1; (_x < 15) && (_y >= 0) && (board[_x][_y] == blackc); _x++, _y--, adjsame[1]++);
 		for (; (_x < 15) && (_y >= 0) && board[_x][_y] == empty; _x++, _y--, adjempty[1]++);
 		for (; (_x < 15) && (_y >= 0) && board[_x][_y] == blackc; _x++, _y--, jumpsame[1]++);
 		for (; (_x < 15) && (_y >= 0) && board[_x][_y] == empty; _x++, _y--, jumpempty[1]++);
 		for (; (_x < 15) && (_y >= 0) && board[_x][_y] == blackc; _x++, _y--, jumpjumpsame[1]++);
 
-		//ÏòÓÒ
+		//å‘å³
 		for (_x = x + 1; (_x < 15) && (board[_x][y] == blackc); _x++, adjsame[2]++);
 		for (; (_x < 15) && board[_x][y] == empty; _x++, adjempty[2]++);
 		for (; (_x < 15) && board[_x][y] == blackc; _x++, jumpsame[2]++);
 		for (; (_x < 15) && board[_x][y] == empty; _x++, jumpempty[2]++);
 		for (; (_x < 15) && board[_x][y] == blackc; _x++, jumpjumpsame[2]++);
 
-		//ÓÒÏÂ
+		//å³ä¸‹
 		for (_x = x + 1, _y = y + 1; (_x < 15) && (_y < 15) && (board[_x][_y] == blackc); _x++, _y++, adjsame[3]++);
 		for (; (_x < 15) && (_y < 15) && board[_x][_y] == empty; _x++, _y++, adjempty[3]++);
 		for (; (_x < 15) && (_y < 15) && board[_x][_y] == blackc; _x++, _y++, jumpsame[3]++);
 		for (; (_x < 15) && (_y < 15) && board[_x][_y] == empty; _x++, _y++, jumpempty[3]++);
 		for (; (_x < 15) && (_y < 15) && board[_x][_y] == blackc; _x++, _y++, jumpjumpsame[3]++);
 
-		//ÏòÏÂ
+		//å‘ä¸‹
 		for (_y = y + 1; (_y < 15) && (board[x][_y] == blackc); _y++, adjsame[4]++);
 		for (; (_y < 15) && board[x][_y] == empty; _y++, adjempty[4]++);
 		for (; (_y < 15) && board[x][_y] == blackc; _y++, jumpsame[4]++);
 		for (; (_y < 15) && board[x][_y] == empty; _y++, jumpempty[4]++);
 		for (; (_y < 15) && board[x][_y] == blackc; _y++, jumpjumpsame[4]++);
 
-		//×óÏÂ
+		//å·¦ä¸‹
 		for (_x = x - 1, _y = y + 1; (_x >= 0) && (_y < 15) && (board[_x][_y] == blackc); _x--, _y++, adjsame[5]++);
 		for (; (_x >= 0) && (_y < 15) && board[_x][_y] == empty; _x--, _y++, adjempty[5]++);
 		for (; (_x >= 0) && (_y < 15) && board[_x][_y] == blackc; _x--, _y++, jumpsame[5]++);
 		for (; (_x >= 0) && (_y < 15) && board[_x][_y] == empty; _x--, _y++, jumpempty[5]++);
 		for (; (_x >= 0) && (_y < 15) && board[_x][_y] == blackc; _x--, _y++, jumpjumpsame[5]++);
 
-		//Ïò×ó
+		//å‘å·¦
 		for (_x = x - 1; (_x >= 0) && (board[_x][y] == blackc); _x--, adjsame[6]++);
 		for (; (_x >= 0) && board[_x][y] == empty; _x--, adjempty[6]++);
 		for (; (_x >= 0) && board[_x][y] == blackc; _x--, jumpsame[6]++);
 		for (; (_x >= 0) && board[_x][y] == empty; _x--, jumpempty[6]++);
 		for (; (_x >= 0) && board[_x][y] == blackc; _x--, jumpjumpsame[6]++);
 
-		//×óÉÏ
+		//å·¦ä¸Š
 		for (_x = x - 1, _y = y - 1; (_x >= 0) && (_y >= 0) && (board[_x][_y] == blackc); _x--, _y--, adjsame[7]++);
 		for (; (_x >= 0) && (_y >= 0) && board[_x][_y] == empty; _x--, _y--, adjempty[7]++);
 		for (; (_x >= 0) && (_y >= 0) && board[_x][_y] == blackc; _x--, _y--, jumpsame[7]++);
 		for (; (_x >= 0) && (_y >= 0) && board[_x][_y] == empty; _x--, _y--, jumpempty[7]++);
 		for (; (_x >= 0) && (_y >= 0) && board[_x][_y] == blackc; _x--, _y--, jumpjumpsame[7]++);
 
-		//ÏÈ¼ì²éÊÇ·ñ³ÉÁ¬Îå£¬Èô³ÉÁ¬Îå£¬ÓÅÏÈÓÚ½ûÊÖ£¬ºÚÆå»ñÊ¤
+		//å…ˆæ£€æŸ¥æ˜¯å¦æˆè¿äº”ï¼Œè‹¥æˆè¿äº”ï¼Œä¼˜å…ˆäºç¦æ‰‹ï¼Œé»‘æ£‹è·èƒœ
 		/*
-		°Ë¸ö·½Ïò
-		×óÉÏ7 ÏòÉÏ0 ÓÒÉÏ1
-		Ïò×ó6       ÏòÓÒ2
-		×óÏÂ5 ÏòÏÂ4 ÓÒÏÂ3
+		å…«ä¸ªæ–¹å‘
+		å·¦ä¸Š7 å‘ä¸Š0 å³ä¸Š1
+		å‘å·¦6       å‘å³2
+		å·¦ä¸‹5 å‘ä¸‹4 å³ä¸‹3
 
-		ËÄÌõÏß
-		0   ÊúÖ±   ¡ü¡ı
-		1 ×óÏÂÓÒÉÏ ¨L¨J
-		2   Ë®Æ½   ¡û¡ú
-		3 ×óÉÏÓÒÏÂ ¨I¨K
+		å››æ¡çº¿
+		0   ç«–ç›´   â†‘â†“
+		1 å·¦ä¸‹å³ä¸Š â†™â†—
+		2   æ°´å¹³   â†â†’
+		3 å·¦ä¸Šå³ä¸‹ â†–â†˜
 		*/
 		for (int i = 0; i < 4; ++i) {
 			if (adjsame[i] + adjsame[i + 4] == 4) {
@@ -660,29 +660,29 @@ public:
 			}
 		}
 
-		//¡ª¡ª¡ª¡ª½ûÊÖÅĞ¶Ï¡ª¡ª¡ª¡ª
-		int three = 0, four = 0;//»îÈıÊı¡¢»îËÄ+³åËÄÊı
+		//â€”â€”â€”â€”ç¦æ‰‹åˆ¤æ–­â€”â€”â€”â€”
+		int three = 0, four = 0;//æ´»ä¸‰æ•°ã€æ´»å››+å†²å››æ•°
 
 
 		for (int i = 0; i < 4; ++i) {
-			//³¤Á¬½ûÊÖ
-			if (adjsame[i] + adjsame[i + 4] >= 5) return longConnection;//Îå×ÓÒÔÉÏÏàÁ¬
+			//é•¿è¿ç¦æ‰‹
+			if (adjsame[i] + adjsame[i + 4] >= 5) return longConnection;//äº”å­ä»¥ä¸Šç›¸è¿
 
-			//ËÄ×ÓÏàÁ¬£º?¡ñ¡ñ¡ñ¡ñ?
-			// ?Ö¸³ıºÚÆåÍâµÄËùÓĞ
+			//å››å­ç›¸è¿ï¼š?â—â—â—â—?
+			// ?æŒ‡é™¤é»‘æ£‹å¤–çš„æ‰€æœ‰
 			else if (adjsame[i] + adjsame[i + 4] == 3) {
 
-				//»îËÄ¡¢³åËÄÅĞ¶Ï
+				//æ´»å››ã€å†²å››åˆ¤æ–­
 				bool isFour = false;
 
-				//?¿Õ¡ñ¡ñ¡ñ¡ñ?
+				//?ç©ºâ—â—â—â—?
 				if (adjempty[i] > 0) {
-					//Í¨¹ıµİ¹éÅĞ¶Ï¹Ø¼üµãÊÇ·ñ¿ÉÏÂ
+					//é€šè¿‡é€’å½’åˆ¤æ–­å…³é”®ç‚¹æ˜¯å¦å¯ä¸‹
 					//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 					isFour = true;
 				}
 
-				//?¡ñ¡ñ¡ñ¡ñ¿Õ?
+				//?â—â—â—â—ç©º?
 				if (adjempty[i + 4] > 0) {
 					//if (KeyPointForbiddenCheck(x, y, adjsame[i+4], i+4) == notForbidden) 
 					isFour = true;
@@ -690,32 +690,32 @@ public:
 				if (isFour) four++;
 			}
 
-			//Èı×ÓÏàÁ¬£º?¡ñ¡ñ¡ñ?
+			//ä¸‰å­ç›¸è¿ï¼š?â—â—â—?
 			else if (adjsame[i] + adjsame[i + 4] == 2) {
 
-				//»îËÄ¡¢³åËÄÅĞ¶Ï
+				//æ´»å››ã€å†²å››åˆ¤æ–­
 
-				//?¡ñ¿Õ¡ñ¡ñ¡ñ?
+				//?â—ç©ºâ—â—â—?
 				if (adjempty[i] == 1 && jumpsame[i] == 1) {
 					//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 					four++;
 				}
-				//?¡ñ¡ñ¡ñ¿Õ¡ñ?
+				//?â—â—â—ç©ºâ—?
 				if (adjempty[i + 4] == 1 && jumpsame[i + 4] == 1) {
 					//if (KeyPointForbiddenCheck(x, y, adjsame[i+4], i+4) == notForbidden) 
 					four++;
 				}
 
-				//»îÈıÅĞ¶Ï
+				//æ´»ä¸‰åˆ¤æ–­
 				bool isThree = false;
 
-				//?¿Õ¿Õ¡ñ¡ñ¡ñ¿Õ£¿
+				//?ç©ºç©ºâ—â—â—ç©ºï¼Ÿ
 				if (((adjempty[i] > 2) || ((adjempty[i] == 2) && (jumpsame[i] == 0))) && ((adjempty[i + 4] > 1) || ((adjempty[i + 4] == 1) && (jumpsame[i + 4] == 0)))) {
 					//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 					isThree = true;
 				}
 
-				//?¿Õ¡ñ¡ñ¡ñ¿Õ¿Õ£¿
+				//?ç©ºâ—â—â—ç©ºç©ºï¼Ÿ
 				if (((adjempty[i + 4] > 2) || ((adjempty[i + 4] == 2) && (jumpsame[i] == 0))) && ((adjempty[i] > 1) || ((adjempty[i] == 1) && (jumpsame[i] == 0)))) {
 					//if (KeyPointForbiddenCheck(x, y, adjsame[i+4], i+4) == notForbidden) 
 					isThree = true;
@@ -724,12 +724,12 @@ public:
 				if (isThree) three++;
 			}
 
-			//¶ş×ÓÏàÁ¬ ?¡ñ¡ñ?
+			//äºŒå­ç›¸è¿ ?â—â—?
 			else if (adjsame[i] + adjsame[i + 4] == 1) {
 
-				//»îËÄ¡¢³åËÄÅĞ¶Ï
+				//æ´»å››ã€å†²å››åˆ¤æ–­
 
-				//?¡ñ¡ñ¿Õ¡ñ¡ñ?
+				//?â—â—ç©ºâ—â—?
 				if (adjempty[i] == 1 && jumpsame[i] == 2) {
 					//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 					four++;
@@ -739,9 +739,9 @@ public:
 					four++;
 				}
 
-				//»îÈıÅĞ¶Ï
+				//æ´»ä¸‰åˆ¤æ–­
 
-				//?¿Õ¡ñ¿Õ¡ñ¡ñ¿Õ?
+				//?ç©ºâ—ç©ºâ—â—ç©º?
 				if ((adjempty[i] == 1) && (adjsame[i + 4] == 1) && ((jumpempty[i + 4] > 1) || ((jumpempty[i + 4] == 1) && (jumpjumpsame[i + 4] == 0))) && ((adjempty[i] > 1) || ((adjempty[i] == 1) && (jumpsame[i] == 0)))) {
 					//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 					three++;
@@ -752,45 +752,45 @@ public:
 				}
 			}
 
-			//Ò»×Ó ?¡ñ?
+			//ä¸€å­ ?â—?
 			else if (adjsame[i] + adjsame[i + 4] == 0) {
 
-				//»îËÄ¡¢³åËÄÅĞ¶Ï
+				//æ´»å››ã€å†²å››åˆ¤æ–­
 
-				//?¡ñ¡ñ¡ñ¿Õ¡ñ£¿
+				//?â—â—â—ç©ºâ—ï¼Ÿ
 				if (adjempty[i] == 1 && jumpsame[i] == 3) {
 					//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 					four++;
 				}
 
-				//?¡ñ¿Õ¡ñ¡ñ¡ñ?
+				//?â—ç©ºâ—â—â—?
 				if (adjempty[i + 4] == 1 && jumpsame[i + 4] == 3) {
 					//if (KeyPointForbiddenCheck(x, y, adjsame[i+4], i+4) == notForbidden) 
 					four++;
 				}
 
-				//»îÈıÅĞ¶Ï
+				//æ´»ä¸‰åˆ¤æ–­
 
-				//?¿Õ¡ñ¡ñ¿Õ¡ñ¿Õ£¿
+				//?ç©ºâ—â—ç©ºâ—ç©ºï¼Ÿ
 				if ((adjempty[i] == 1) && (jumpsame[i] == 2) && ((jumpempty[i] > 1) || ((jumpempty[i] == 1) && (jumpjumpsame[i] == 0))) && ((adjempty[i + 4] > 1) || ((adjempty[i + 4] == 1) && (jumpsame[i + 4] == 0)))) {
 					//if (KeyPointForbiddenCheck(x, y, adjsame[i], i) == notForbidden) 
 					three++;
 				}
 
-				//?¿Õ¡ñ¿Õ¡ñ¡ñ¿Õ?
+				//?ç©ºâ—ç©ºâ—â—ç©º?
 				if ((adjempty[i + 4] == 1) && (jumpsame[i + 4] == 2) && ((jumpempty[i + 4] > 1) || ((jumpempty[i + 4] == 1) && (jumpjumpsame[i + 4] == 0))) && ((adjempty[i] > 1) || ((adjempty[i] == 1) && (jumpsame[i + 4] == 0)))) {
 					//if (KeyPointForbiddenCheck(x, y, adjsame[i + 4], i + 4) == notForbidden) 
 					three++;
 				}
 			}
 		}
-		//¡ª¡ª¡ª¡ª½ûÊÖÅĞ¶Ï½áÊø¡ª¡ª¡ª¡ª
+		//â€”â€”â€”â€”ç¦æ‰‹åˆ¤æ–­ç»“æŸâ€”â€”â€”â€”
 
 		if (four > 1) return doubleFour;
 		if (three > 1)return doubleThree;
 		return notForbidden;
 	}
-	// Âä×Ó
+	// è½å­
 	bool placePiece(int row, int col, state player) {
 		if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE || board[row][col] != state::empty||((player==blackc)&&((ForbiddenCheck(row, col) != notForbidden)|| (ForbiddenCheck(row, col) != blackwin)))) {
 			return false;
@@ -798,13 +798,13 @@ public:
 		board[row][col] = player;
 		return true;
 	}
-	// »ñÈ¡ÆåÅÌ×´Ì¬
+	// è·å–æ£‹ç›˜çŠ¶æ€
 	state getState(int row, int col) const {
 		return board[row][col];
 	}
-	//¿ÉÖ±½Ó¸´ÖÆÖ®Ç°µÄ
+	//å¯ç›´æ¥å¤åˆ¶ä¹‹å‰çš„
 	bool Won(state color) {
-		//ºáÏò
+		//æ¨ªå‘
 		for (int i = 0; i < BOARD_SIZE; ++i) {
 			int count = 0;
 			for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -819,7 +819,7 @@ public:
 				}
 			}
 		}
-		//×İÏò
+		//çºµå‘
 		for (int j = 0; j < BOARD_SIZE; ++j) {
 			int count = 0;
 			for (int i = 0; i < BOARD_SIZE; ++i) {
@@ -834,7 +834,7 @@ public:
 				}
 			}
 		}
-		//×óÏÂÓÒÉÏ
+		//å·¦ä¸‹å³ä¸Š
 		for (int k = 4; k < 25; ++k) {
 			int count = 0;
 			for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -850,7 +850,7 @@ public:
 				}
 			}
 		}
-		//×óÉÏÓÒÏÂ
+		//å·¦ä¸Šå³ä¸‹
 		for (int k = -10; k < 11; ++k) {
 			int count = 0;
 			for (int i = 0; i < BOARD_SIZE; ++i) {
@@ -869,7 +869,7 @@ public:
 		return false;
 	}
 
-	// ¼ì²éÆåÅÌÊÇ·ñÒÑÂú
+	// æ£€æŸ¥æ£‹ç›˜æ˜¯å¦å·²æ»¡
 	bool isFull() const {
 		for (int i = 0; i < BOARD_SIZE; ++i) {
 			for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -882,9 +882,9 @@ public:
 	}
 };
 /*
-//ÃÉÌØ¿¨Âå
+//è’™ç‰¹å¡æ´›
 int M(Board board,state player) {
-	bool turn = 0;//0 black£¬1 white
+	bool turn = 0;//0 blackï¼Œ1 white
 	if (player==blackc) {
 		turn = 0;
 	}
@@ -900,8 +900,8 @@ int M(Board board,state player) {
 		}
 	}
 	std::random_device rd;
-	std::mt19937 gen(rd());//Î±Ëæ»úÊıÉú³ÉÆ÷Àà
-	std::uniform_int_distribution<> dis(0, emptyCells.size() - 1);//Ö¸¶¨·¶Î§ÄÚËæ»ú·Ç¸ºÊı
+	std::mt19937 gen(rd());//ä¼ªéšæœºæ•°ç”Ÿæˆå™¨ç±»
+	std::uniform_int_distribution<> dis(0, emptyCells.size() - 1);//æŒ‡å®šèŒƒå›´å†…éšæœºéè´Ÿæ•°
 
 	int winCount = 0;
 	int Simulations = 1000;
@@ -950,7 +950,7 @@ std::vector<int> ComputerMove (Board board, state player) {
 
 int evaluate(Board board, state color) {
 	/*
-	Ö»ÅĞ¶ÏÊ¤Àû»¹ÊÇÌ«ÈõÁË
+	åªåˆ¤æ–­èƒœåˆ©è¿˜æ˜¯å¤ªå¼±äº†
 	if (board.Won(color)) {
 		return 1000;
 	}
@@ -963,8 +963,8 @@ int evaluate(Board board, state color) {
 	int computerscore = 0;
 	int peoplescore = 0;
 
-	//ºáÏò
-	//µçÄÔ
+	//æ¨ªå‘
+	//ç”µè„‘
 	for (int i = 0; i < BOARD_SIZE; ++i) {
 		int count = 0;
 		for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -980,7 +980,7 @@ int evaluate(Board board, state color) {
 			}
 		}
 	}
-	//ÈË
+	//äºº
 	for (int i = 0; i < BOARD_SIZE; ++i) {
 		int count = 0;
 		for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -997,8 +997,8 @@ int evaluate(Board board, state color) {
 		}
 	}
 
-	//×İÏò
-	//µçÄÔ
+	//çºµå‘
+	//ç”µè„‘
 	for (int j = 0; j < BOARD_SIZE; ++j) {
 		int count = 0;
 		for (int i = 0; i < BOARD_SIZE; ++i) {
@@ -1014,7 +1014,7 @@ int evaluate(Board board, state color) {
 			}
 		}
 	}
-	//ÈË
+	//äºº
 	for (int j = 0; j < BOARD_SIZE; ++j) {
 		int count = 0;
 		for (int i = 0; i < BOARD_SIZE; ++i) {
@@ -1031,8 +1031,8 @@ int evaluate(Board board, state color) {
 		}
 	}
 
-	//×óÏÂÓÒÉÏ
-	//µçÄÔ
+	//å·¦ä¸‹å³ä¸Š
+	//ç”µè„‘
 	for (int k = 4; k < 25; ++k) {
 		int count = 0;
 		for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -1049,7 +1049,7 @@ int evaluate(Board board, state color) {
 			}
 		}
 	}
-	//ÈË
+	//äºº
 	for (int k = 4; k < 25; ++k) {
 		int count = 0;
 		for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -1067,8 +1067,8 @@ int evaluate(Board board, state color) {
 		}
 	}
 
-	//×óÉÏÓÒÏÂ
-	//µçÄÔ
+	//å·¦ä¸Šå³ä¸‹
+	//ç”µè„‘
 	for (int k = -10; k < 11; ++k) {
 		int count = 0;
 		for (int i = 0; i < BOARD_SIZE; ++i) {
@@ -1085,7 +1085,7 @@ int evaluate(Board board, state color) {
 			}
 		}
 	}
-	//ÈË
+	//äºº
 	for (int k = -10; k < 11; ++k) {
 		int count = 0;
 		for (int i = 0; i < BOARD_SIZE; ++i) {
@@ -1106,7 +1106,7 @@ int evaluate(Board board, state color) {
 	return computerscore-peoplescore;
 }
 
-// alpha-beta ¼ôÖ¦µÄ¼«Ğ¡¼«´óËã·¨
+// alpha-beta å‰ªæçš„æå°æå¤§ç®—æ³•
 int minimax(Board board, int depth, int alpha, int beta, bool isMaximizing, state color) {
 	if (depth == 0 || board.Won(color) || board.Won(color == blackc ? whitec : blackc) || board.isFull()) {
 		return evaluate(board, color);
@@ -1169,11 +1169,11 @@ std::pair<int, int> aiMove(Board board, state color) {
 	return bestMove;
 }
 
-//±£´æ
+//ä¿å­˜
 void SAVE() {
 	std::ofstream outFile("memory.txt");
 	if (!outFile.is_open()) {
-		std::cerr << "ÎŞ·¨´ò¿ªÎÄ¼ş´æ´¢Æå¾Ö£¡" << std::endl;
+		std::cerr << "æ— æ³•æ‰“å¼€æ–‡ä»¶å­˜å‚¨æ£‹å±€ï¼" << std::endl;
 		return;
 	}
 	outFile << step << std::endl;
@@ -1202,15 +1202,15 @@ void SAVE() {
 
 	outFile.close();
 
-	std::cout << "ÒÑ³É¹¦´æ´¢Æå¾Ö~" << std::endl;
+	std::cout << "å·²æˆåŠŸå­˜å‚¨æ£‹å±€~" << std::endl;
 	return;
 }
 
-//¶ÁÈ¡
+//è¯»å–
 void READ() {
 	std::ifstream inFile("memory.txt");
 	if (!inFile.is_open()) {
-		std::cerr << "ÎŞ·¨´ò¿ªÎÄ¼ş¶ÁÈ¡Æå¾Ö£¡" << std::endl;
+		std::cerr << "æ— æ³•æ‰“å¼€æ–‡ä»¶è¯»å–æ£‹å±€ï¼" << std::endl;
 		return;
 	}
 	inFile >> step;
@@ -1239,11 +1239,11 @@ void READ() {
 	}
 	inFile.close();
 
-	std::cout << "ÒÑ³É¹¦¶ÁÈ¡Æå¾Ö~" << std::endl;
+	std::cout << "å·²æˆåŠŸè¯»å–æ£‹å±€~" << std::endl;
 	return;
 }
 
-//Í¸Ã÷Í¼Æ¬
+//é€æ˜å›¾ç‰‡
 void transparentimage(IMAGE* dstimg, int x, int y, IMAGE* srcimg) {
 	HDC dstDC = GetImageHDC(dstimg);
 	HDC srcDC = GetImageHDC(srcimg);
@@ -1253,7 +1253,7 @@ void transparentimage(IMAGE* dstimg, int x, int y, IMAGE* srcimg) {
 	AlphaBlend(dstDC, x, y, w, h, srcDC, 0, 0, w, h, bf);
 }
 
-//°´Å¥£¨Ã»Ğ´³ÉÀàÊÇÒòÎªÆÚ¼ä³öÁËµã²»»á½â¾öµÄÎÊÌâ£©
+//æŒ‰é’®ï¼ˆæ²¡å†™æˆç±»æ˜¯å› ä¸ºæœŸé—´å‡ºäº†ç‚¹ä¸ä¼šè§£å†³çš„é—®é¢˜ï¼‰
 struct Button {
 	int x = 0;
 	int y = 0;
@@ -1264,14 +1264,14 @@ struct Button {
 	bool isHover = false;
 	bool isClicked = false;
 };
-//³õÊ¼»¯
+//åˆå§‹åŒ–
 void inb(Button& button,int _x, int _y, int _width, int _height) {
 	button.x = _x;
 	button.y = _y;
 	button.width = _width;
 	button.height = _height;
 }//initialize button
-//»æÖÆ
+//ç»˜åˆ¶
 void drawbutton(Button button) {
 	if (button.isHover) {
 		putimage(button.x, button.y, &button.image_change);
@@ -1280,7 +1280,7 @@ void drawbutton(Button button) {
 		putimage(button.x, button.y, &button.image);
 	}
 }
-//»æÖÆÍ¸Ã÷±³¾°
+//ç»˜åˆ¶é€æ˜èƒŒæ™¯
 void transdrawbutton(Button button) {
 	if (button.isHover) {
 		transparentimage(NULL, button.x, button.y, &button.image_change);
@@ -1289,20 +1289,20 @@ void transdrawbutton(Button button) {
 		transparentimage(NULL, button.x, button.y, &button.image);
 	}
 }
-//Êó±êÊÇ·ñÔÚ°´Å¥ÉÏ
+//é¼ æ ‡æ˜¯å¦åœ¨æŒ‰é’®ä¸Š
 void checkHover(Button* button,int mouseX, int mouseY) {
 	button->isHover = ((mouseX >= (button->x)) && (mouseX <= (button->x) + (button->width)) && (mouseY >= (button->y)) && (mouseY <= (button->y) + (button->height)));
 }
-//µç×ÓÆ¤·ôµÄÍ¼±êĞèÒª½øĞĞÒ»µãÆ«ÒÆ
+//ç”µå­çš®è‚¤çš„å›¾æ ‡éœ€è¦è¿›è¡Œä¸€ç‚¹åç§»
 void JX_checkHover(Button* button, int mouseX, int mouseY,int dy) {
 	button->isHover = ((mouseX >= (button->x)) && (mouseX <= (button->x) + (button->width)) && (mouseY >= ((button->y)+dy)) && (mouseY <= (button->y) + (button->height)));
 }
-//ÊÇ·ñµã»÷°´Å¥
+//æ˜¯å¦ç‚¹å‡»æŒ‰é’®
 void checkClick(Button* button,int mouseX, int mouseY) {
 	button->isClicked = ((button->isHover) && (mouseX >= (button->x)) && (mouseX <= (button->x) + (button->width)) && (mouseY >= (button->y)) && (mouseY <= (button->y) + (button->height)));
 }
 
-//·ÉÌìÆ¤·ôÖ÷Ò³Ãæ
+//é£å¤©çš®è‚¤ä¸»é¡µé¢
 class FeiTianStartPage {
 private:
 	IMAGE spb;
@@ -1345,10 +1345,10 @@ public:
 		transparentimage(NULL, rx, ry, &fr);
 	}
 	void update() {
-		//×óÍ¼¶¯×÷
+		//å·¦å›¾åŠ¨ä½œ
 		if (lanother_state) {
 			time++;
-			time %= 50;//·ÀÖ¹Ì«¿ì
+			time %= 50;//é˜²æ­¢å¤ªå¿«
 			if (time == 0) {
 				add+=5;
 				if (add > 628) {
@@ -1359,7 +1359,7 @@ public:
 			}
 		}
 		else {
-			time++;//Èë³¡¶¯×÷
+			time++;//å…¥åœºåŠ¨ä½œ
 			time %= 8;
 			if (lx <= 11) {
 				lanother_state = true;
@@ -1369,7 +1369,7 @@ public:
 				ly += 1;
 			}
 		}
-		//ÓÒÍ¼¶¯×÷
+		//å³å›¾åŠ¨ä½œ
 		if (ranother_state) {
 			if (time == 0) {
 				add += 5;
@@ -1377,7 +1377,7 @@ public:
 				ry = 660 + 5 * cos(add);
 			}
 		}
-		else {//Èë³¡¶¯×÷
+		else {//å…¥åœºåŠ¨ä½œ
 			if (rx >= 900-11-356) {
 				ranother_state = true;
 			}
@@ -1388,7 +1388,7 @@ public:
 		}
 	}
 	bool shouldGo() {
-		//Èë³¡¶¯×÷ÊÇ·ñ½áÊø
+		//å…¥åœºåŠ¨ä½œæ˜¯å¦ç»“æŸ
 		return (lanother_state && ranother_state);
 	}
 	void handleMouse() {
@@ -1405,30 +1405,30 @@ public:
 			if (start.isClicked) {
 				std::cout << "start clicked" << std::endl;
 				start.isHover = false;
-				PAGE = ftready;//µã»÷¿ªÊ¼½øÈë×¼±¸½çÃæ
+				PAGE = ftready;//ç‚¹å‡»å¼€å§‹è¿›å…¥å‡†å¤‡ç•Œé¢
 			}
 			else if (setting.isClicked) {
 				std::cout << "setting clicked" << std::endl;
 				setting.isHover = false;
-				PAGE = ftSetting;//µã»÷ÉèÖÃ½øÈë»»·ô½çÃæ
+				PAGE = ftSetting;//ç‚¹å‡»è®¾ç½®è¿›å…¥æ¢è‚¤ç•Œé¢
 			}
 			else if (rule.isClicked) {
 				std::cout << "rule clicked" << std::endl;
 				rule.isHover = false;
-				PAGE = ftRule;//µã»÷¹æÔò½øÈë¹æÔò½éÉÜ
+				PAGE = ftRule;//ç‚¹å‡»è§„åˆ™è¿›å…¥è§„åˆ™ä»‹ç»
 			}
 			else std::cout << "nothing happend" << std::endl;
 			break;
 		}
 	}
 };
-//·ÉÌìÆ¤·ô×¼±¸½øÈëÒ³Ãæ
+//é£å¤©çš®è‚¤å‡†å¤‡è¿›å…¥é¡µé¢
 class FeiTianReady {
 private:
 	IMAGE blur, lb;
 	IMAGE n, nc, s, sc;
 	Button newstart, save;
-	int pagestep = 1;//±êÊ¾Ò³Êı
+	int pagestep = 1;//æ ‡ç¤ºé¡µæ•°
 	IMAGE vp, vpc, vc, vcc;
 	Button pvp, pvc;
 	IMAGE f, fc, l, lc;
@@ -1475,12 +1475,12 @@ public:
 		putimage(150, 150, &lb);
 		drawbutton(newstart);
 		drawbutton(save);
-		if (pagestep == 2) {//µÚ¶şÒ³£¬Ñ¡Ä£Ê½
+		if (pagestep == 2) {//ç¬¬äºŒé¡µï¼Œé€‰æ¨¡å¼
 			transparentimage(NULL, 0, 0, &blur);
 			drawbutton(pvp);
 			drawbutton(pvc);
 		}
-		if (pagestep == 3) {//µÚÈıÒ³£¬ÈË»ú¶ÔÕ½ÏÂÑ¡ÏÈºóÊÖ
+		if (pagestep == 3) {//ç¬¬ä¸‰é¡µï¼Œäººæœºå¯¹æˆ˜ä¸‹é€‰å…ˆåæ‰‹
 			transparentimage(NULL, 0, 0, &blur);
 			drawbutton(pvp);
 			drawbutton(pvc);
@@ -1500,20 +1500,20 @@ public:
 				checkClick(&newstart, msg.x, msg.y);
 				checkClick(&save, msg.x, msg.y);
 				if (newstart.isClicked) {
-					step = 0;//ĞÂµÄ¿ªÊ¼
-					pagestep = 2;//ÏÂÒ»Ò³
+					step = 0;//æ–°çš„å¼€å§‹
+					pagestep = 2;//ä¸‹ä¸€é¡µ
 					newstart.isHover = false;
 					std::cout << "newstart clicked" << std::endl;
 				}
 				else if (save.isClicked) {
-					READ();//¶ÁÈ¡´æµµ
+					READ();//è¯»å–å­˜æ¡£
 					pagestep = 2;
 					save.isHover = false;
 					std::cout << "read clicked" << std::endl;
 				}
 				else if (msg.x <= 150 || msg.x >= 750 || msg.y <= 150 || msg.y >= 750) {
 					std::cout << "return" << std::endl;
-					PAGE = ftStart;//·µ»ØÖ÷Ò³Ãæ
+					PAGE = ftStart;//è¿”å›ä¸»é¡µé¢
 				}
 				else {
 					std::cout << "nothing happend" << std::endl;
@@ -1530,20 +1530,20 @@ public:
 				checkClick(&pvp, msg.x, msg.y);
 				checkClick(&pvc, msg.x, msg.y);
 				if (pvp.isClicked) {
-					computer = false;//²»ÔËĞĞÈË¹¤ÖÇÄÜ
+					computer = false;//ä¸è¿è¡Œäººå·¥æ™ºèƒ½
 					PAGE = ftGame;
-					pagestep = 1;//¿ªÊ¼ÓÎÏ·ºópage³õÊ¼»¯
+					pagestep = 1;//å¼€å§‹æ¸¸æˆåpageåˆå§‹åŒ–
 					pvp.isHover = false;
 					std::cout << "pvp clicked" << std::endl;
 				}
 				else if (pvc.isClicked) {
-					computer = true;//ÔËĞĞÈË¹¤ÖÇÄÜ
-					pagestep = 3;//ÏÂÒ»Ò³
+					computer = true;//è¿è¡Œäººå·¥æ™ºèƒ½
+					pagestep = 3;//ä¸‹ä¸€é¡µ
 					pvc.isHover = false;
 					std::cout << "pvc clicked" << std::endl;
 				}
 				else if (msg.x <= 150 || msg.x >= 750 || msg.y <= 150 || msg.y >= 750) {
-					pagestep = 1;//·µ»ØÉÏÒ»Ò³
+					pagestep = 1;//è¿”å›ä¸Šä¸€é¡µ
 					std::cout << "return pagestep1" << std::endl;
 				}
 				else {
@@ -1561,21 +1561,21 @@ public:
 				checkClick(&first, msg.x, msg.y);
 				checkClick(&last, msg.x, msg.y);
 				if (first.isClicked) {
-					XianShou = true;//ÏÈÊÖ
+					XianShou = true;//å…ˆæ‰‹
 					PAGE = ftGame;
-					pagestep = 1;//³õÊ¼»¯
+					pagestep = 1;//åˆå§‹åŒ–
 					first.isHover = false;
 					std::cout << "first clicked" << std::endl;
 				}
 				else if (last.isClicked) {
-					XianShou = false;//ºóÊÖ
+					XianShou = false;//åæ‰‹
 					PAGE = ftGame;
-					pagestep = 1;//³õÊ¼»¯
+					pagestep = 1;//åˆå§‹åŒ–
 					pvc.isHover = false;
 					std::cout << "last clicked" << std::endl;
 				}
 				else if (msg.x <= 150 || msg.x >= 750 || msg.y <= 150 || msg.y >= 750) {
-					pagestep = 2;//·µ»ØÉÏÒ»Ò³
+					pagestep = 2;//è¿”å›ä¸Šä¸€é¡µ
 					std::cout << "return pagestep2" << std::endl;
 				}
 				else {
@@ -1587,14 +1587,14 @@ public:
 
 	}
 };
-//·ÉÌìÆ¤·ô¹æÔòÒ³Ãæ
+//é£å¤©çš®è‚¤è§„åˆ™é¡µé¢
 class FeiTianRule {
 private:
 	IMAGE blur;
 	IMAGE r1, r2, r3, r4;
 	IMAGE n, nc, p, pc;
 	Button next, previous;
-	int page = 1;//Ò³Êı
+	int page = 1;//é¡µæ•°
 public:
 	FeiTianRule() {
 		loadimage(&blur, "resources/blur.png");
@@ -1617,7 +1617,7 @@ public:
 	void draw() {
 		transparentimage(NULL, 0, 0, &blur);
 		transparentimage(NULL, 0, 0, &blur);
-		//²»Í¬Ò³ÏÔÊ¾²»Í¬°´Å¥
+		//ä¸åŒé¡µæ˜¾ç¤ºä¸åŒæŒ‰é’®
 		if (page == 1) {
 			putimage(150, 150, &r1);
 			drawbutton(next);
@@ -1639,7 +1639,7 @@ public:
 	}
 	void handleMouse() {
 		MOUSEMSG msg = GetMouseMsg();
-		//²»Í¬Ò³¼ì²â²»Í¬°´Å¥
+		//ä¸åŒé¡µæ£€æµ‹ä¸åŒæŒ‰é’®
 		if (page == 1) {
 			checkHover(&next, msg.x, msg.y);
 		}
@@ -1657,13 +1657,13 @@ public:
 			checkClick(&previous, msg.x, msg.y);
 			if (next.isClicked) {
 				std::cout << "next clicked" << std::endl;
-				page++;//ÏÂÒ»Ò³
+				page++;//ä¸‹ä¸€é¡µ
 				previous.isHover = false;
 				next.isHover = false;
 			}
 			else if (previous.isClicked) {
 				std::cout << "previous clicked" << std::endl;
-				page--;//ÉÏÒ»Ò³
+				page--;//ä¸Šä¸€é¡µ
 				previous.isHover = false;
 				next.isHover = false;
 			}
@@ -1676,7 +1676,7 @@ public:
 			}
 			break;
 		}
-		//·ÀÖ¹Ò³Êı³ö·¶Î§
+		//é˜²æ­¢é¡µæ•°å‡ºèŒƒå›´
 		if (page < 1) {
 			page = 1;
 		}
@@ -1685,8 +1685,8 @@ public:
 		}
 	}
 };
-//·ÉÌìÆ¤·ôÉèÖÃ£¨»»·ô£©½çÃæ
-class FeiTianSetting {//µã»÷´óÍ¼¾Í»á»»Æ¤·ô£¨Ã»ÏëºÃÓĞÊ²Ã´±ğµÄÉèÖÃÄÚÈİ£©
+//é£å¤©çš®è‚¤è®¾ç½®ï¼ˆæ¢è‚¤ï¼‰ç•Œé¢
+class FeiTianSetting {//ç‚¹å‡»å¤§å›¾å°±ä¼šæ¢çš®è‚¤ï¼ˆæ²¡æƒ³å¥½æœ‰ä»€ä¹ˆåˆ«çš„è®¾ç½®å†…å®¹ï¼‰
 private:
 	IMAGE blur, lb;
 	//IMAGE c, cc;
@@ -1735,7 +1735,7 @@ public:
 		}
 	}
 };
-//·ÉÌìÆ¤·ôÏÂÆå½çÃæ
+//é£å¤©çš®è‚¤ä¸‹æ£‹ç•Œé¢
 class FeiTianBoard {
 private:
 	IMAGE board, black, white;
@@ -1765,13 +1765,13 @@ public:
 	~FeiTianBoard() {};
 	void draw() {
 		putimage(0, 0, &board);
-		//ÌØÊâ±ê¼Ç
+		//ç‰¹æ®Šæ ‡è®°
 		if (step > 0) {
 			int x = 0;
 			int y = 0;
-			//Èç¹û½áÊø£¬¸ßÁÁÊ¤ÀûÔ­Òò
+			//å¦‚æœç»“æŸï¼Œé«˜äº®èƒœåˆ©åŸå› 
 			if (end) {
-				setfillcolor(RGB(139, 0, 18));//±±´óºì£¡£¡£¡
+				setfillcolor(RGB(139, 0, 18));//åŒ—å¤§çº¢ï¼ï¼ï¼
 				setlinecolor(RGB(139, 0, 18));
 				for (int i = 0; i < 5; ++i) {
 					x = 175 + winx[i] * 550 / 14;
@@ -1779,14 +1779,14 @@ public:
 					fillcircle(x, y, R + 2);
 				}
 			}
-			//¸ßÁÁÉÏÒ»²½×ßÔÚÁËÄÄÀï
+			//é«˜äº®ä¸Šä¸€æ­¥èµ°åœ¨äº†å“ªé‡Œ
 			x = 175 + placex[step] * 550 / 14;
 			y = 175 + placey[step] * 550 / 14;
 			setfillcolor(RGB(114, 214, 191));
 			setlinecolor(RGB(114, 214, 191));
 			fillcircle(x, y, R+1);
 		}
-		//¸ù¾İµ±Ç°Æå¾Ö»æÍ¼
+		//æ ¹æ®å½“å‰æ£‹å±€ç»˜å›¾
 		for (int i = 0; i < BOARD_SIZE; ++i) {
 			for (int j = 0; j < BOARD_SIZE; ++j) {
 				if (BOARD[step][i][j] == blackc) {//blackc 1
@@ -1804,7 +1804,7 @@ public:
 		drawbutton(regret);
 		drawbutton(stop);
 	}
-	//ÏÂÆå
+	//ä¸‹æ£‹
 	void update() {
 		step++;
 		for (int i = 0; i < BOARD_SIZE; ++i) {
@@ -1818,7 +1818,7 @@ public:
 		else {
 			BOARD[step][placex[step]][placey[step]] = whitec;
 		}
-		//ÏÂÍêÆåºóÅĞ¶ÏÊÇ·ñÊ¤Àû
+		//ä¸‹å®Œæ£‹ååˆ¤æ–­æ˜¯å¦èƒœåˆ©
 		if (con == blackwin) {
 			end = true;
 		}
@@ -1832,7 +1832,7 @@ public:
 	void handleMouse() {
 		turn = step % 2;
 		MOUSEMSG msg = GetMouseMsg();
-		//¹â±êÅ²¶¯µ½¿ÉÏÂ×ÓÎ»ÖÃ»áÏÔÊ¾ÂÖÀª
+		//å…‰æ ‡æŒªåŠ¨åˆ°å¯ä¸‹å­ä½ç½®ä¼šæ˜¾ç¤ºè½®å»“
 		if (!end) {
 			for (int i = 0; i < BOARD_SIZE; ++i) {
 				for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -1855,7 +1855,7 @@ public:
 		case WM_LBUTTONDOWN:
 			checkClick(&regret, msg.x, msg.y);
 			checkClick(&stop, msg.x, msg.y);
-			//ÅĞ¶ÏÊÇ·ñµã»÷»ÚÆå
+			//åˆ¤æ–­æ˜¯å¦ç‚¹å‡»æ‚”æ£‹
 			if (regret.isClicked) {
 				std::cout << "regret clicked" << std::endl;
 				if (step > 0) {
@@ -1885,13 +1885,13 @@ public:
 				}
 				regret.isHover = false;
 			}
-			//ÅĞ¶ÏÊ±ºòµã»÷ÔİÍ£
+			//åˆ¤æ–­æ—¶å€™ç‚¹å‡»æš‚åœ
 			else if (stop.isClicked) {
 				std::cout << "stop clicked" << std::endl;
 				PAGE = ftstop;
 				stop.isHover = false;
 			}
-			//·Ç·Ö³öÊ¤¸ºÊ±£¬¼ìË÷ÏÂÆåÎ»ÖÃ
+			//éåˆ†å‡ºèƒœè´Ÿæ—¶ï¼Œæ£€ç´¢ä¸‹æ£‹ä½ç½®
 			else if (!end) {
 				for (int i = 0; i < BOARD_SIZE; ++i) {
 					for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -1902,18 +1902,18 @@ public:
 								if (!turn) {
 									con = ForbiddenCheck(i, j);
 									if (con == doubleFour) {
-										std::cout << "ËÄËÄ½ûÊÖ" << std::endl;
-										MessageBox(NULL, "ËÄËÄ½ûÊÖ", "½ûÊÖÌáĞÑ", MB_OK);
+										std::cout << "å››å››ç¦æ‰‹" << std::endl;
+										MessageBox(NULL, "å››å››ç¦æ‰‹", "ç¦æ‰‹æé†’", MB_OK);
 										break;
 									}
 									else if (con == doubleThree) {
-										std::cout << "ÈıÈı½ûÊÖ" << std::endl;
-										MessageBox(NULL, "ÈıÈı½ûÊÖ", "½ûÊÖÌáĞÑ", MB_OK);
+										std::cout << "ä¸‰ä¸‰ç¦æ‰‹" << std::endl;
+										MessageBox(NULL, "ä¸‰ä¸‰ç¦æ‰‹", "ç¦æ‰‹æé†’", MB_OK);
 										break;
 									}
 									else if (con == longConnection) {
-										std::cout << "³¤Á¬½ûÊÖ" << std::endl;
-										MessageBox(NULL, "³¤Á¬½ûÊÖ", "½ûÊÖÌáĞÑ", MB_OK);
+										std::cout << "é•¿è¿ç¦æ‰‹" << std::endl;
+										MessageBox(NULL, "é•¿è¿ç¦æ‰‹", "ç¦æ‰‹æé†’", MB_OK);
 										break;
 									}
 
@@ -1937,14 +1937,14 @@ public:
 	}
 	void play() {
 		if (step == 225) {
-			MessageBox(NULL, "Æ½¾Ö", "½á¹û", MB_OK);
+			MessageBox(NULL, "å¹³å±€", "ç»“æœ", MB_OK);
 		}
-		turn = step % 2;//Í¨¹ı²½ÊıÈ·¶¨Ë­Âä×Ó£¨Ö®Ç°ÊÔ¹ıturn=!turn£¬µ«ÊÇ»á³öÏÖÎÊÌâ£©
+		turn = step % 2;//é€šè¿‡æ­¥æ•°ç¡®å®šè°è½å­ï¼ˆä¹‹å‰è¯•è¿‡turn=!turnï¼Œä½†æ˜¯ä¼šå‡ºç°é—®é¢˜ï¼‰
 		if (computer) {
 			turn = step % 2;
-			if (XianShou) {//ÈËÏÈÊÖ£¬µçÄÔ°×Æå
+			if (XianShou) {//äººå…ˆæ‰‹ï¼Œç”µè„‘ç™½æ£‹
 				computercolor = whitec;
-				if ((turn % 2 == 1)&&(!end)) {//ÂÖµ½µçÄÔÏÂÆå
+				if ((turn % 2 == 1)&&(!end)) {//è½®åˆ°ç”µè„‘ä¸‹æ£‹
 					cpboard.cp();
 					std::pair<int, int> aiPos = aiMove(cpboard, computercolor);
 					placex[step + 1] = aiPos.first;
@@ -1956,9 +1956,9 @@ public:
 					handleMouse();
 				}
 			}
-			else {//ÈËºóÊÖ£¬µçÄÔºÚÆå
+			else {//äººåæ‰‹ï¼Œç”µè„‘é»‘æ£‹
 				computercolor = blackc;
-				if ((turn % 2 == 0)&&(!end)) {//ÂÖµ½µçÄÔÏÂÆå
+				if ((turn % 2 == 0)&&(!end)) {//è½®åˆ°ç”µè„‘ä¸‹æ£‹
 					if (step == 0) {
 						placex[step + 1] = 7;
 						placey[step + 1] = 7;
@@ -1983,7 +1983,7 @@ public:
 	}
 
 };
-//·ÉÌìÆ¤·ôÏÂÆåÔİÍ£½çÃæ
+//é£å¤©çš®è‚¤ä¸‹æ£‹æš‚åœç•Œé¢
 class FeiTianStop {
 private:
 	IMAGE blur, lb;
@@ -2039,24 +2039,24 @@ public:
 			checkClick(&costume, msg.x, msg.y);
 			if (retry.isClicked) {
 				std::cout << "retry clicked" << std::endl;
-				step = 0;//ÖØÀ´
+				step = 0;//é‡æ¥
 				PAGE = ftGame;
 				retry.isHover = false;
 			}
 			else if (save.isClicked) {
-				SAVE();//±£´æ
+				SAVE();//ä¿å­˜
 				save.isHover = false;
 				std::cout << "save clicked" << std::endl;
 			}
 			else if (exit.isClicked) {
-				PAGE = ftStart;//·µ»Ø
-				step = 0;//ÖØÖÃ£¨Ã»µã±£´æ¾ÍÍË³ö£¬²»¸ºÈÎºÎÔğÈÎ¹ş£©
+				PAGE = ftStart;//è¿”å›
+				step = 0;//é‡ç½®ï¼ˆæ²¡ç‚¹ä¿å­˜å°±é€€å‡ºï¼Œä¸è´Ÿä»»ä½•è´£ä»»å“ˆï¼‰
 				exit.isHover = false;
 				std::cout << "exit clicked" << std::endl;
 			}
 			else if (costume.isClicked) {
 				std::cout << "costume clicked" << std::endl;
-				PAGE = jxstop;//»»Æ¤·ô
+				PAGE = jxstop;//æ¢çš®è‚¤
 				costume.isHover = false;
 			}
 			else if (msg.x <= 150 || msg.x >= 750 || msg.y <= 150 || msg.y >= 750) {
@@ -2072,7 +2072,7 @@ public:
 	}
 };
 
-//µÚ¶ş¸öÆ¤·ôÂß¼­Í¬ÉÏ£¬²»¹ı¶à×¢ÊÍ£¨ÒòÎª¼¸ºõ¶¼ÊÇ¸´ÖÆÕ³Ìù0
+//ç¬¬äºŒä¸ªçš®è‚¤é€»è¾‘åŒä¸Šï¼Œä¸è¿‡å¤šæ³¨é‡Šï¼ˆå› ä¸ºå‡ ä¹éƒ½æ˜¯å¤åˆ¶ç²˜è´´0
 class JiXieStartPage{
 private:
 	IMAGE t1, t2, t3, t4, t5;
@@ -2124,7 +2124,7 @@ public:
 	void update(){
 		time++;
 		time %= 20;
-		//Ê¹±êÌâÓĞ¹ÊÕÏĞ§¹û
+		//ä½¿æ ‡é¢˜æœ‰æ•…éšœæ•ˆæœ
 		if (time == 0) {
 			add ++;
 			add %= 35;
@@ -2284,14 +2284,14 @@ public:
 				checkClick(&pvp, msg.x, msg.y);
 				checkClick(&pvc, msg.x, msg.y);
 				if (pvp.isClicked) {
-					computer = false;//²»ÔËĞĞÈË¹¤ÖÇÄÜ
+					computer = false;//ä¸è¿è¡Œäººå·¥æ™ºèƒ½
 					PAGE = jxGame;
 					pagestep = 1;
 					pvp.isHover = false;
 					std::cout << "pvp clicked" << std::endl;
 				}
 				else if (pvc.isClicked) {
-					computer = true;//ÔËĞĞÈË¹¤ÖÇÄÜ
+					computer = true;//è¿è¡Œäººå·¥æ™ºèƒ½
 					pagestep = 3;
 					pvc.isHover = false;
 					std::cout << "pvc clicked" << std::endl;
@@ -2315,14 +2315,14 @@ public:
 				checkClick(&first, msg.x, msg.y);
 				checkClick(&last, msg.x, msg.y);
 				if (first.isClicked) {
-					XianShou = true;//ÏÈÊÖ
+					XianShou = true;//å…ˆæ‰‹
 					PAGE = jxGame;
 					pagestep = 1;
 					first.isHover = false;
 					std::cout << "first clicked" << std::endl;
 				}
 				else if (last.isClicked) {
-					XianShou = false;//ºóÊÖ
+					XianShou = false;//åæ‰‹
 					PAGE = jxGame;
 					pagestep = 1;
 					last.isHover = false;
@@ -2563,7 +2563,7 @@ public:
 		else {
 			BOARD[step][placex[step]][placey[step]] = whitec;
 		}
-		//ÏÂÍêÆåºóÅĞ¶ÏÊÇ·ñÊ¤Àû
+		//ä¸‹å®Œæ£‹ååˆ¤æ–­æ˜¯å¦èƒœåˆ©
 		if (con == blackwin) {
 			end = true;
 		}
@@ -2577,7 +2577,7 @@ public:
 	void handleMouse() {
 		turn = step % 2;
 		MOUSEMSG msg = GetMouseMsg();
-		//¹â±êÅ²¶¯µ½¿ÉÏÂ×ÓÎ»ÖÃ»áÏÔÊ¾ÂÖÀª
+		//å…‰æ ‡æŒªåŠ¨åˆ°å¯ä¸‹å­ä½ç½®ä¼šæ˜¾ç¤ºè½®å»“
 		if (!end) {
 			for (int i = 0; i < BOARD_SIZE; ++i) {
 				for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -2600,7 +2600,7 @@ public:
 		case WM_LBUTTONDOWN:
 			checkClick(&regret, msg.x, msg.y);
 			checkClick(&stop, msg.x, msg.y);
-			//ÅĞ¶ÏÊÇ·ñµã»÷»ÚÆå
+			//åˆ¤æ–­æ˜¯å¦ç‚¹å‡»æ‚”æ£‹
 			if (regret.isClicked) {
 				std::cout << "regret clicked" << std::endl;
 				if (step > 0) {
@@ -2630,13 +2630,13 @@ public:
 				}
 				regret.isHover = false;
 			}
-			//ÅĞ¶ÏÊ±ºòµã»÷ÔİÍ£
+			//åˆ¤æ–­æ—¶å€™ç‚¹å‡»æš‚åœ
 			else if (stop.isClicked) {
 				std::cout << "stop clicked" << std::endl;
 				PAGE = jxstop;
 				stop.isHover = false;
 			}
-			//·Ç·Ö³öÊ¤¸ºÊ±£¬¼ìË÷ÏÂÆåÎ»ÖÃ
+			//éåˆ†å‡ºèƒœè´Ÿæ—¶ï¼Œæ£€ç´¢ä¸‹æ£‹ä½ç½®
 			else if (!end) {
 				for (int i = 0; i < BOARD_SIZE; ++i) {
 					for (int j = 0; j < BOARD_SIZE; ++j) {
@@ -2647,18 +2647,18 @@ public:
 								if (!turn) {
 									con = ForbiddenCheck(i, j);
 									if (con == doubleFour) {
-										std::cout << "ËÄËÄ½ûÊÖ" << std::endl;
-										MessageBox(NULL, "ËÄËÄ½ûÊÖ", "½ûÊÖÌáĞÑ", MB_OK);
+										std::cout << "å››å››ç¦æ‰‹" << std::endl;
+										MessageBox(NULL, "å››å››ç¦æ‰‹", "ç¦æ‰‹æé†’", MB_OK);
 										break;
 									}
 									else if (con == doubleThree) {
-										std::cout << "ÈıÈı½ûÊÖ" << std::endl;
-										MessageBox(NULL, "ÈıÈı½ûÊÖ", "½ûÊÖÌáĞÑ", MB_OK);
+										std::cout << "ä¸‰ä¸‰ç¦æ‰‹" << std::endl;
+										MessageBox(NULL, "ä¸‰ä¸‰ç¦æ‰‹", "ç¦æ‰‹æé†’", MB_OK);
 										break;
 									}
 									else if (con == longConnection) {
-										std::cout << "³¤Á¬½ûÊÖ" << std::endl;
-										MessageBox(NULL, "³¤Á¬½ûÊÖ", "½ûÊÖÌáĞÑ", MB_OK);
+										std::cout << "é•¿è¿ç¦æ‰‹" << std::endl;
+										MessageBox(NULL, "é•¿è¿ç¦æ‰‹", "ç¦æ‰‹æé†’", MB_OK);
 										break;
 									}
 
@@ -2682,14 +2682,14 @@ public:
 	}
 	void play() {
 		if (step == 225) {
-			MessageBox(NULL, "Æ½¾Ö", "½á¹û", MB_OK);
+			MessageBox(NULL, "å¹³å±€", "ç»“æœ", MB_OK);
 		}
-		turn = step % 2;//Í¨¹ı²½ÊıÈ·¶¨Ë­Âä×Ó£¨Ö®Ç°ÊÔ¹ıturn=!turn£¬µ«ÊÇ»á³öÏÖÎÊÌâ£©
+		turn = step % 2;//é€šè¿‡æ­¥æ•°ç¡®å®šè°è½å­ï¼ˆä¹‹å‰è¯•è¿‡turn=!turnï¼Œä½†æ˜¯ä¼šå‡ºç°é—®é¢˜ï¼‰
 		if (computer) {
 			turn = step % 2;
-			if (XianShou) {//ÈËÏÈÊÖ£¬µçÄÔ°×Æå
+			if (XianShou) {//äººå…ˆæ‰‹ï¼Œç”µè„‘ç™½æ£‹
 				computercolor = whitec;
-				if ((turn % 2 == 1) && (!end)) {//ÂÖµ½µçÄÔÏÂÆå
+				if ((turn % 2 == 1) && (!end)) {//è½®åˆ°ç”µè„‘ä¸‹æ£‹
 					cpboard.cp();
 					std::pair<int, int> aiPos = aiMove(cpboard, computercolor);
 					placex[step + 1] = aiPos.first;
@@ -2701,9 +2701,9 @@ public:
 					handleMouse();
 				}
 			}
-			else {//ÈËºóÊÖ£¬µçÄÔºÚÆå
+			else {//äººåæ‰‹ï¼Œç”µè„‘é»‘æ£‹
 				computercolor = blackc;
-				if ((turn % 2 == 0) && (!end)) {//ÂÖµ½µçÄÔÏÂÆå
+				if ((turn % 2 == 0) && (!end)) {//è½®åˆ°ç”µè„‘ä¸‹æ£‹
 					if (step == 0) {
 						placex[step + 1] = 7;
 						placey[step + 1] = 7;
@@ -2817,7 +2817,7 @@ public:
 	}
 };
 
-//ÔËĞĞ
+//è¿è¡Œ
 void run() {
 	FeiTianStartPage ftsp;
 	FeiTianReady ftrd;
@@ -2833,8 +2833,8 @@ void run() {
 	JiXieBoard jxb;
 	JiXieStop jxsto;
 	while (true) {
-		//Ë«»º´æ»æÍ¼£¬ĞèÒª·ÅÔÚ»æÍ¼´úÂëÖ®Ç°ºÍÖ®ºó
-		BeginBatchDraw();//¿ªÊ¼ÅúÁ¿»æÍ¼
+		//åŒç¼“å­˜ç»˜å›¾ï¼Œéœ€è¦æ”¾åœ¨ç»˜å›¾ä»£ç ä¹‹å‰å’Œä¹‹å
+		BeginBatchDraw();//å¼€å§‹æ‰¹é‡ç»˜å›¾
 
 		if (PAGE == ftStart || PAGE == ftready || PAGE == ftRule || PAGE == ftSetting) {
 			ftsp.draw();
@@ -2905,7 +2905,7 @@ void run() {
 			}
 		}
 
-		FlushBatchDraw();//Çå¿ÕÅúÁ¿»æÍ¼
+		FlushBatchDraw();//æ¸…ç©ºæ‰¹é‡ç»˜å›¾
 
 	}
 
@@ -2918,7 +2918,7 @@ int main() {
 	initgraph(900, 900, EW_SHOWCONSOLE);
 
 	HWND hnd = GetHWnd();
-	SetWindowText(hnd, "Îå×ÓÆå");
+	SetWindowText(hnd, "äº”å­æ£‹");
 
 	run();
 	

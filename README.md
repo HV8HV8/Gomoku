@@ -1,14 +1,13 @@
-<img width="1347" height="1347" alt="image" src="https://github.com/user-attachments/assets/56f6387f-e1a2-4dcc-b62a-21e8972e4750" /># Gomoku
 大一计算概论(A)的五子棋大作业，正在改善ing
 ## 界面展示
 
 「本作业中所有界面元素均为原创手绘或通过设计工具绘制，未经授权，不得用于任何商业及非商业的二次用途，包括但不限于复制、传播、改编、转载等。」
 ### 飞天皮肤界面
-<img width="1347" height="1344" alt="image" src="https://github.com/user-attachments/assets/36b386b9-189e-49c1-911b-5a77cb6edffd" />  
+<img width="1000" height="1000" alt="image" src="https://github.com/user-attachments/assets/36b386b9-189e-49c1-911b-5a77cb6edffd" />  
 移动鼠标，左右两侧飞天会运动  
 
 #### 鼠标悬浮在按钮上会变色  
-<img width="1343" height="1341" alt="1a04c3ea-c74e-4995-925b-bad617522807" src="https://github.com/user-attachments/assets/c4f2cf6d-9c15-4c99-97c6-2b541ef2df29" />  
+<img width="1000" height="1000" alt="1a04c3ea-c74e-4995-925b-bad617522807" src="https://github.com/user-attachments/assets/c4f2cf6d-9c15-4c99-97c6-2b541ef2df29" />  
 
 #### 规则界面展示
 <img width="1347" height="1346" alt="image" src="https://github.com/user-attachments/assets/1add613c-4f7a-408b-abb7-14f40885bbf6" />  
